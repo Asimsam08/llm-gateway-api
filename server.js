@@ -1,0 +1,23 @@
+const express = require("express");
+const app = express();
+require("dotenv").config();
+const PORT = process.env.PORT || 3000
+app.use(express.json())
+
+app.get("/",(req,res)=>{
+    res.json({
+        message: "AI Chat API is running"
+    });
+});
+
+app.post("/api/chat",(req,res)=>{
+    const message = req.body.message
+    res.json({
+        message: message,
+        reply: "It will come from AI model"
+    });
+});
+
+app.listen(PORT, ()=>{
+    console.log(`server is listening on https://localhost:${PORT}`)
+})
