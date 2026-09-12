@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 require("dotenv").config();
+const chatRoutes = require("./src/routes/chat.routes")
 const PORT = process.env.PORT || 3000
 app.use(express.json())
 
@@ -10,14 +11,14 @@ app.get("/",(req,res)=>{
     });
 });
 
-app.post("/api/chat",(req,res)=>{
-    const message = req.body.message
-    res.json({
-        message: message,
-        reply: "It will come from AI model"
-    });
-});
-
+// app.post("/api/chat",(req,res)=>{
+//     const message = req.body.message
+//     res.json({
+//         message: message,
+//         reply: "It will come from AI model"
+//     });
+// });
+app.use("/api", chatRoutes)
 app.listen(PORT, ()=>{
     console.log(`server is listening on https://localhost:${PORT}`)
 })
