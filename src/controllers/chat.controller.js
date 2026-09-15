@@ -1,16 +1,52 @@
+const { conversation, message } = require("../lib/prisma")
 const {generateResponse} = require("../services/gemini.service")
 const chat = async (req,res,next)=>{
 
     try {
-        const message = req.body.message
+        const {message, conversationId} = req.body
+        
+
+        if(!conversationId) {
+             return res.status(400).json({
+                error : "conversationId is required"
+            })
+        }
+    
 
         if(!message) {
-            res.status(400).json({
+          return  res.status(400).json({
                 error : "Message is required"
             })
         }
 
+        const conversation = await prisma.conversation.findFirst({
+            where : {
+                id : conversationId,
+                userId: req.user.id
+            }
+        })
+
+        if(!conversation) {
+            return res.status(404).json({
+                message : "No conversation found for this user"
+            })
+        }
+
+        await prisma.message.create({
+            data : {
+                role : "user",
+                content : message,
+                conversationId : conversationId
+            }
+        })
+
         const reply = await generateResponse(message)
+
+        await prisma.message.create({
+            role : "assistant",
+            content: reply,
+            conversationId : conversationId
+        })
 
         res.json({
             message : message,
@@ -19,7 +55,11 @@ const chat = async (req,res,next)=>{
         })
 
     }catch(error){
-            next(error)
+
+        console.error(error)
+        res.status(500).json({
+            message : "Internal Server Error"
+        })
     }
 
 }
