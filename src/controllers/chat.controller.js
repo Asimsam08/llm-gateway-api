@@ -1,5 +1,6 @@
 const prisma = require("../lib/prisma");
 const { generateWithRetry } = require("../services/llm.service");
+const {buildContext } = require("../services/context.service")
 const chat = async (req, res, next) => {
   try {
     const { message, conversationId } = req.body;
@@ -41,7 +42,12 @@ const chat = async (req, res, next) => {
     });
 
     try {
-      const reply = await generateWithRetry(message.trim());
+
+      const context = await buildContext({
+        conversationId,
+        currentMessage: message.trim()
+      })
+      const reply = await generateWithRetry(context.messages);
 
       // Mark user message as completed
 

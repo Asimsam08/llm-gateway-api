@@ -3,10 +3,23 @@ const ai = new GoogleGenAI({
     apiKey : process.env.GEMINI_API_KEY
 })
 
-const generateResponse = async (message)=>{
+const generateResponse = async (messages)=>{
+
+    const contents = messages.map((message)=>{
+        return {
+            role : message.role === "assistant" ? "model" :"user",
+            parts : [
+                {
+                    text : message.content,
+                }
+            ]
+
+        }
+    })
+
     const response = await ai.models.generateContent({
         model : 'gemini-3.6-flash',
-        contents : message,
+        contents,
         config : {
             systemInstruction : `   You are a helpful AI assistant.
 

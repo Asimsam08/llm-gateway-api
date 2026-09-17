@@ -4,11 +4,11 @@ const {
 } = require("../utils/retry");
 const withTimeout = require("../utils/withTimeout");
 
-const generateWithRetry = async (message) => {
+const generateWithRetry = async (messages) => {
   return retryWithBackoff(
     () => {
       return withTimeout(
-        generateResponse(message),
+        generateResponse(messages),
         30000
       );
     },
