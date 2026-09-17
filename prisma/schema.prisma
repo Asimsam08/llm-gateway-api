@@ -12,6 +12,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum MessageStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
 model User {
   id            Int            @id @default(autoincrement())
   email         String         @unique
@@ -38,7 +44,7 @@ model Message {
   role           String
   content        String
   createdAt      DateTime     @default(now())
-
+    status    MessageStatus @default(COMPLETED)
   conversationId Int
   conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
 }
