@@ -1,7 +1,7 @@
 const prisma = require("../lib/prisma");
 const { generateWithRetry } = require("../services/llm.service");
 const {buildContext } = require("../services/context.service")
-const chat = async (req, res, next) => {
+const chat = async (req, res) => {
   try {
     const { message, conversationId } = req.body;
 
