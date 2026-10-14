@@ -15,19 +15,6 @@ app.use(cors());
 app.use(fileUpload());
 app.use(express.json());
 
-// app.get("/", (req, res) => {
-//   res.json({
-//     message: "AI Chat API is running",
-//   });
-// });
-
-// app.post("/api/chat",(req,res)=>{
-//     const message = req.body.message
-//     res.json({
-//         message: message,
-//         reply: "It will come from AI model"
-//     });
-// });
 app.use("/api", chatRoutes);
 app.use("/api", userRoutes);
 app.use("/api/auth", authRoutes);
